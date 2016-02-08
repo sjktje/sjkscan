@@ -7,9 +7,12 @@ import subprocess
 
 from wand.image import Image
 
-
 def run_cmd(args):
-    """Run shell command and return its output."""
+    """Run shell command and return its output.
+
+    :param args: list or string of shell command and arguments
+    :returns: output of command
+    """
 
     if isinstance(args, list):
         args = ' '.join(args)
@@ -25,7 +28,10 @@ def run_cmd(args):
 
 
 def scan(output_directory):
-    """Run scanimage in batch mode."""
+    """Run scanimage in batch mode.
+
+    :param string output_directory: directory to write scanned images to
+    """
 
     command = [
         'scanimage',
@@ -43,7 +49,11 @@ def scan(output_directory):
 
 
 def rotate_image(filename, degrees):
-    """Rotate filename given amount of degrees."""
+    """Rotate image given amount of degrees.
+
+    :param string filename: file to rotate
+    :param int degrees: amount of degrees to rotate
+    """
     with Image(filename=filename) as image:
         with image.clone() as rotated:
             rotated.rotate(degrees)
@@ -51,7 +61,11 @@ def rotate_image(filename, degrees):
 
 
 def rotate_all_images_in_dir(dirname, degrees):
-    """Rotate all files in directory."""
+    """Rotate all files in directory.
+
+    :param string dirname: name of directory in which files should be rotated
+    :param int degrees: number of degrees to rotate
+    """
     for f in os.scandir(dirname):
         if not f.is_file():
             next
@@ -60,13 +74,15 @@ def rotate_all_images_in_dir(dirname, degrees):
 
 def is_blank(filename):
     """
+    Check if image is blank.
+
     Return true if filename is a blank image. This is a slightly modified
     version of Vinatha Ekanayake's is_blank(), which is part of Scanpdf
     (https://github.com/virantha/scanpdf) and licensed under the Apache
     license.
 
-    Returns true if image in filename is blank
-    standard deviation: 56.9662 (0.223397)
+    :param string filename: file name of image to check
+    :returns: True if image is blank, False otherwise.
     """
     if not os.path.exists(filename):
         return True
@@ -90,6 +106,8 @@ def remove_if_blank(filename):
 
     This is useful when scanning in duplex mode using a backend that doesn't
     support skipping blank pages.
+
+    :param string filename: name of file to remove, if blank
     """
     if is_blank(filename):
         print('Removing (probably) blank page {}'.format(filename))
