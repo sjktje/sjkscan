@@ -85,6 +85,16 @@ def is_blank(filename):
     return True
 
 
+def remove_if_blank(filename):
+    """Remove file if it is blank.
+
+    This is useful when scanning in duplex mode using a backend that doesn't
+    support skipping blank pages.
+    """
+    if is_blank(filename):
+        os.remove(filename)
+
+
 def main():
     """TODO: docstring"""
     output_dir = 'output'
