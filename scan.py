@@ -10,9 +10,19 @@ def rotate_image(filename, degrees):
             rotated.rotate(degrees)
             rotated.save(filename=filename)
 
+
+def page_is_empty(filename):
+    """Check if page is empty.
+
+    Return true if it is, otherwise false.
+    """
+    pass
+
+
 def main():
     """TODO: docstring"""
     rotate_image('test.pdf', 180)
+
 
 if __name__ == '__main__':
     main()
