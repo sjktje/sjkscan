@@ -4,7 +4,7 @@
 from wand.image import Image
 
 def rotate_image(filename, degrees):
-    """Rotates filename degrees degrees."""
+    """Rotate filename given amount of degrees."""
     with Image(filename=filename) as image:
         with image.clone() as rotated:
             rotated.rotate(degrees)
