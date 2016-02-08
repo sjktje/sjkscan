@@ -44,9 +44,32 @@ def rotate_all_images_in_dir(dirname, degrees):
             next
         rotate_image(os.path.join(dirname, f.name), degrees)
 
-    Return true if it is, otherwise false.
+
+def is_blank(filename):
     """
-    pass
+    Return true if filename is a blank image. This is a slightly modified
+    version of Vinatha Ekanayake's is_blank(), which is part of Scanpdf
+    (https://github.com/virantha/scanpdf) and licensed under the Apache
+    license.
+
+    Returns true if image in filename is blank
+    standard deviation: 56.9662 (0.223397)
+    """
+    if not os.path.exists(filename):
+        return True
+
+    c = 'identify -verbose %s' % filename
+    result = self.cmd(c)
+    mStdDev = re.compile("""\s*standard deviation:\s*\d+\.\d+\s*\((?P<percent>\d+\.\d+)\).*""")
+
+    for line in result.splitlines():
+        match = mStdDev.search(line)
+        if match:
+            stdev = float(match.group('percent'))
+            if stdev > 0.1:
+                return False
+
+    return True
 
 
 def main():
