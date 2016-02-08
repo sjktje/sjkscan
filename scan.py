@@ -79,7 +79,7 @@ def is_blank(filename):
         match = mStdDev.search(line)
         if match:
             stdev = float(match.group('percent'))
-            if stdev > 0.1:
+            if stdev > 0.05:
                 return False
 
     return True
