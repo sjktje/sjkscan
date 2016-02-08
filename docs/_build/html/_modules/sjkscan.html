@@ -1,0 +1,201 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>sjkscan &mdash; sjkscan 0.1.1a documentation</title>
+    
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1.1a',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="sjkscan 0.1.1a documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for sjkscan</h1><div class="highlight"><pre>
+<span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># encoding: utf-8</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">subprocess</span>
+
+<span class="kn">from</span> <span class="nn">wand.image</span> <span class="kn">import</span> <span class="n">Image</span>
+
+
+<div class="viewcode-block" id="run_cmd"><a class="viewcode-back" href="../sjkscan.html#sjkscan.run_cmd">[docs]</a><span class="k">def</span> <span class="nf">run_cmd</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Run shell command and return its output.</span>
+
+<span class="sd">    :param args: list or string containing command and arguments</span>
+<span class="sd">    :return: Output as a byte string</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+
+    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Running: {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">args</span><span class="p">))</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">check_output</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">STDOUT</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Execution failed: {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="scan"><a class="viewcode-back" href="../sjkscan.html#sjkscan.scan">[docs]</a><span class="k">def</span> <span class="nf">scan</span><span class="p">(</span><span class="n">output_directory</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Run scanimage in batch mode.</span>
+
+<span class="sd">    :param output_directory: directory to write scanned pages to</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">command</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s1">&#39;scanimage&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;--resolution 300&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;--batch={}/scan_</span><span class="si">%03d</span><span class="s1">.pnm&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">output_directory</span><span class="p">),</span>
+        <span class="s1">&#39;--format=pnm&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;--mode Gray&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;--brightness 80&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;--contrast 100&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;--source &quot;ADF Duplex&quot;&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;-v&#39;</span>
+    <span class="p">]</span>
+
+    <span class="n">run_cmd</span><span class="p">(</span><span class="n">command</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="rotate_image"><a class="viewcode-back" href="../sjkscan.html#sjkscan.rotate_image">[docs]</a><span class="k">def</span> <span class="nf">rotate_image</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">degrees</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Rotate filename given amount of degrees.</span>
+
+<span class="sd">    :param string filename: name of file to rotate</span>
+<span class="sd">    :param int degrees: number of degrees to rotate image</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="n">Image</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">filename</span><span class="p">)</span> <span class="k">as</span> <span class="n">image</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">image</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span> <span class="k">as</span> <span class="n">rotated</span><span class="p">:</span>
+            <span class="n">rotated</span><span class="o">.</span><span class="n">rotate</span><span class="p">(</span><span class="n">degrees</span><span class="p">)</span>
+            <span class="n">rotated</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">filename</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="rotate_all_images_in_dir"><a class="viewcode-back" href="../sjkscan.html#sjkscan.rotate_all_images_in_dir">[docs]</a><span class="k">def</span> <span class="nf">rotate_all_images_in_dir</span><span class="p">(</span><span class="n">dirname</span><span class="p">,</span> <span class="n">degrees</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Rotate all files in directory.</span>
+
+<span class="sd">    :param string dirname: name of directory in which files should be rotated</span>
+<span class="sd">    :param int degrees: number of degrees to rotate</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">scandir</span><span class="p">(</span><span class="n">dirname</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">f</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
+            <span class="nb">next</span>
+        <span class="n">rotate_image</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dirname</span><span class="p">,</span> <span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="p">),</span> <span class="n">degrees</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="is_blank"><a class="viewcode-back" href="../sjkscan.html#sjkscan.is_blank">[docs]</a><span class="k">def</span> <span class="nf">is_blank</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return true if filename is a blank image.</span>
+
+<span class="sd">    This is a slightly modified version of Vinatha Ekanayake&#39;s is_blank(), which</span>
+<span class="sd">    is part of Scanpdf (https://github.com/virantha/scanpdf) and licensed under</span>
+<span class="sd">    the Apache license.</span>
+
+<span class="sd">    :param filename string: name of file to check</span>
+<span class="sd">    :rtype: bool</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">True</span>
+
+    <span class="n">c</span> <span class="o">=</span> <span class="s1">&#39;identify -verbose </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">filename</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">run_cmd</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+    <span class="n">mStdDev</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">b</span><span class="s1">&#39;\s*standard deviation:\s*\d+\.\d+\s*\((?P&lt;percent&gt;\d+\.\d+)\).*&#39;</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">splitlines</span><span class="p">():</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">mStdDev</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
+            <span class="n">stdev</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s1">&#39;percent&#39;</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">stdev</span> <span class="o">&gt;</span> <span class="mf">0.05</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">False</span>
+
+    <span class="k">return</span> <span class="bp">True</span></div>
+
+
+<div class="viewcode-block" id="remove_if_blank"><a class="viewcode-back" href="../sjkscan.html#sjkscan.remove_if_blank">[docs]</a><span class="k">def</span> <span class="nf">remove_if_blank</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Remove file if it is blank.</span>
+
+<span class="sd">    This is useful when scanning in duplex mode using a backend that doesn&#39;t</span>
+<span class="sd">    support skipping blank pages.</span>
+<span class="sd">    :param string filename: name of file to remove, if blank</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">is_blank</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Removing (probably) blank page {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span></div>
+
+
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Svante Kvarnström.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.7</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>
