@@ -8,12 +8,19 @@ from wand.image import Image
 
 
 def run_cmd(args):
-    """Run shell command."""
+    """Run shell command and return its output."""
 
     if isinstance(args, list):
         args = ' '.join(args)
 
-    subprocess.run(args, stderr=subprocess.STDOUT, shell=True)
+    print("Running: {}".format(args))
+
+    try:
+        result = subprocess.check_output(args, stderr=subprocess.STDOUT, shell=True)
+    except OSError as e:
+        print('Execution failed: {}'.format(e))
+
+    return result
 
 
 def scan(output_directory):
@@ -64,8 +71,8 @@ def is_blank(filename):
         return True
 
     c = 'identify -verbose %s' % filename
-    result = self.cmd(c)
-    mStdDev = re.compile("""\s*standard deviation:\s*\d+\.\d+\s*\((?P<percent>\d+\.\d+)\).*""")
+    result = run_cmd(c)
+    mStdDev = re.compile(b'\s*standard deviation:\s*\d+\.\d+\s*\((?P<percent>\d+\.\d+)\).*')
 
     for line in result.splitlines():
         match = mStdDev.search(line)
