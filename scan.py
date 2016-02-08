@@ -1,7 +1,11 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
+import os
+import subprocess
+
 from wand.image import Image
+
 
 def run_cmd(args):
     """Run shell command."""
