@@ -5,7 +5,11 @@ from wand.image import Image
 
 def run_cmd(args):
     """Run shell command."""
-    subprocess.run(args, stderr=subprocess.STDOUT)
+
+    if isinstance(args, list):
+        args = ' '.join(args)
+
+    subprocess.run(args, stderr=subprocess.STDOUT, shell=True)
 
 
 def scan(output_directory):
