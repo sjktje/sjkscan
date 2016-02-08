@@ -92,6 +92,7 @@ def remove_if_blank(filename):
     support skipping blank pages.
     """
     if is_blank(filename):
+        print('Removing (probably) blank page {}'.format(filename))
         os.remove(filename)
 
 
