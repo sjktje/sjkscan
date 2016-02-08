@@ -79,8 +79,10 @@ def is_blank(filename):
 
 def main():
     """TODO: docstring"""
-    rotate_image('test.pdf', 180)
+    output_dir = 'output'
+    scan(output_dir)
 
+    rotate_all_images_in_dir(output_dir, 180)
 
 if __name__ == '__main__':
     main()
