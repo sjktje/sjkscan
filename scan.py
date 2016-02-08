@@ -37,8 +37,12 @@ def rotate_image(filename, degrees):
             rotated.save(filename=filename)
 
 
-def page_is_empty(filename):
-    """Check if page is empty.
+def rotate_all_images_in_dir(dirname, degrees):
+    """Rotate all files in directory."""
+    for f in os.scandir(dirname):
+        if not f.is_file():
+            next
+        rotate_image(os.path.join(dirname, f.name), degrees)
 
     Return true if it is, otherwise false.
     """
