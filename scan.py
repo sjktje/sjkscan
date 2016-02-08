@@ -8,6 +8,25 @@ def run_cmd(args):
     subprocess.run(args, stderr=subprocess.STDOUT)
 
 
+def scan(output_directory):
+    """Run scanimage in batch mode.
+
+    Return resulting image filename."""
+    command = [
+        'scanimage',
+        '--resolution 300',
+        '--batch={}/scan_%03d.pnm'.format(output_directory),
+        '--format=pnm',
+        '--mode Gray',
+        '--brightness 80',
+        '--contrast 100',
+        '--source "ADF Duplex"',
+        '-v'
+    ]
+
+    run_cmd(command)
+
+
 def rotate_image(filename, degrees):
     """Rotate filename given amount of degrees."""
     with Image(filename=filename) as image:
