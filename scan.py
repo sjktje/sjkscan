@@ -3,6 +3,11 @@
 
 from wand.image import Image
 
+def run_cmd(args):
+    """Run shell command."""
+    subprocess.run(args, stderr=subprocess.STDOUT)
+
+
 def rotate_image(filename, degrees):
     """Rotate filename given amount of degrees."""
     with Image(filename=filename) as image:
