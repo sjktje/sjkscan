@@ -9,9 +9,7 @@ def run_cmd(args):
 
 
 def scan(output_directory):
-    """Run scanimage in batch mode.
-
-    Return resulting image filename."""
+    """Run scanimage in batch mode."""
     command = [
         'scanimage',
         '--resolution 300',
