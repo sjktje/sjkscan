@@ -1,5 +1,6 @@
 import os
 import re
+import shutil
 
 from .utils import run_cmd
 from wand.image import Image
@@ -61,6 +62,35 @@ def is_blank(filename):
                 return False
 
     return True
+
+
+def move_blanks(input_dir, output_dir):
+    """Move blank .pnm's in input_dir to output_dir
+
+    :param string input_dir: directory to check for blank .pnm files
+    :param string output_dir: where to move blank .pnm files
+    :returns: number of blank pages moved
+    :rtype: int
+
+    """
+    number_of_blanks = 0
+
+    for entry in os.scandir(input_dir):
+        if not entry.is_file() or not entry.name.endswith('.pnm'):
+            continue
+
+        image = os.path.join(input_dir, entry.name)
+
+        if is_blank(image):
+            try:
+                os.mkdir(output_dir)
+            except:
+                pass  # Assume directory exists.
+
+            shutil.move(image, output_dir)
+            number_of_blanks += 1
+
+    return number_of_blanks
 
 
 def remove_if_blank(filename):
