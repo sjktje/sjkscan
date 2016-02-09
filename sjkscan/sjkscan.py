@@ -14,6 +14,7 @@ def run_cmd(args):
 
     :param args: list or string of shell command and arguments
     :returns: output of command
+
     """
 
     if isinstance(args, list):
@@ -36,6 +37,7 @@ def scan(output_directory):
     """Run scanimage in batch mode.
 
     :param string output_directory: directory to write scanned images to
+
     """
 
     command = [
@@ -58,6 +60,7 @@ def rotate_image(filename, degrees):
 
     :param string filename: file to rotate
     :param int degrees: amount of degrees to rotate
+
     """
     with Image(filename=filename) as image:
         with image.clone() as rotated:
@@ -70,6 +73,7 @@ def rotate_all_images_in_dir(dirname, degrees):
 
     :param string dirname: name of directory in which files should be rotated
     :param int degrees: number of degrees to rotate
+
     """
     for f in os.scandir(dirname):
         if not f.is_file():
@@ -88,6 +92,7 @@ def is_blank(filename):
 
     :param string filename: file name of image to check
     :returns: True if image is blank, False otherwise.
+
     """
     if not os.path.exists(filename):
         return True
@@ -114,6 +119,7 @@ def remove_if_blank(filename):
     support skipping blank pages.
 
     :param string filename: name of file to remove, if blank
+
     """
     if is_blank(filename):
         print('Removing (probably) blank page {}'.format(filename))
@@ -142,14 +148,49 @@ def merge_pdfs(inputs, output):
         merger.write(f)
 
 
+def merge_pdfs_in_dir(directory, output):
+    """Read all pdf files in directory and create one merged output.
+
+    :param string directory: directory containing pdf files to be merged
+    :param string output: filename of new merged pdf
+    """
+    files_to_merge = []
+
+    for file in os.scandir(directory):
+        if not file.is_file():
+            next
+        if file.name[:4] != '.pdf':
+            next
+
+        files_to_merge.append(os.path.join(directory, file.name))
+
+    merge_pdfs(files_to_merge, output)
+
+
 def ocr(filename, language):
     """Perform OCR on file using Tesseract.
 
     :param string filename: file to perform OCR on
     :param string language: language(s) expected to be used in file
+
     """
     base_output_name = filename[:-4]
     command = 'tesseract {} {} -l {} pdf'.format(filename,
                                                  base_output_name,
                                                  language)
     run_cmd(command)
+
+
+def ocr_pnms_in_dir(directory, language):
+    """Perform OCR on all pnm files in given directory.
+
+    :param string directory: directory in which all pnm files will be OCR:ed
+    :param string language: language(s) expected to be used in files
+
+    """
+    for file in os.scandir(directory):
+        if not file.is_file():
+            next
+        if file.name[:4] != '.pnm':
+            next
+        ocr(os.path.join(directory, file.name), language)
