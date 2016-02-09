@@ -1,58 +1,9 @@
-#!/usr/bin/env python
-# encoding: utf-8
-
 import os
 import re
-import subprocess
 
+from .utils import run_cmd
 from wand.image import Image
 from PyPDF2 import PdfFileMerger
-
-
-def run_cmd(args):
-    """Run shell command and return its output.
-
-    :param args: list or string of shell command and arguments
-    :returns: output of command
-
-    """
-
-    if isinstance(args, list):
-        args = ' '.join(args)
-
-    print("Running: {}".format(args))
-
-    try:
-        result = subprocess.check_output(
-            args,
-            stderr=subprocess.STDOUT,
-            shell=True)
-    except OSError as e:
-        print('Execution failed: {}'.format(e))
-
-    return result
-
-
-def scan(output_directory):
-    """Run scanimage in batch mode.
-
-    :param string output_directory: directory to write scanned images to
-
-    """
-
-    command = [
-        'scanimage',
-        '--resolution 300',
-        '--batch={}/scan_%03d.pnm'.format(output_directory),
-        '--format=pnm',
-        '--mode Gray',
-        '--brightness 80',
-        '--contrast 100',
-        '--source "ADF Duplex"',
-        '-v'
-    ]
-
-    run_cmd(command)
 
 
 def rotate_image(filename, degrees):
@@ -77,7 +28,7 @@ def rotate_all_images_in_dir(dirname, degrees):
     """
     for f in os.scandir(dirname):
         if not f.is_file():
-            next
+            continue
         rotate_image(os.path.join(dirname, f.name), degrees)
 
 
@@ -134,8 +85,9 @@ def merge_pdfs(inputs, output):
 
     """
     merger = PdfFileMerger()
-
     input_fds = dict()
+
+    out = open(output, 'wb')
 
     for filename in inputs:
         try:
@@ -144,8 +96,7 @@ def merge_pdfs(inputs, output):
             print('Error opening {}: {}'.format(filename, e))
         merger.append(input_fds[filename])
 
-    with open(output, 'wb') as f:
-        merger.write(f)
+    merger.write(out)
 
 
 def merge_pdfs_in_dir(directory, output):
@@ -158,9 +109,9 @@ def merge_pdfs_in_dir(directory, output):
 
     for file in os.scandir(directory):
         if not file.is_file():
-            next
-        if file.name[:4] != '.pdf':
-            next
+            continue
+        if file.name[-4:] != '.pdf':
+            continue
 
         files_to_merge.append(os.path.join(directory, file.name))
 
@@ -190,7 +141,7 @@ def ocr_pnms_in_dir(directory, language):
     """
     for file in os.scandir(directory):
         if not file.is_file():
-            next
-        if file.name[:4] != '.pnm':
-            next
+            continue
+        if file.name[-4:] != '.pnm':
+            continue
         ocr(os.path.join(directory, file.name), language)
