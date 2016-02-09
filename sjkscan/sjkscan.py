@@ -22,7 +22,10 @@ def run_cmd(args):
     print("Running: {}".format(args))
 
     try:
-        result = subprocess.check_output(args, stderr=subprocess.STDOUT, shell=True)
+        result = subprocess.check_output(
+            args,
+            stderr=subprocess.STDOUT,
+            shell=True)
     except OSError as e:
         print('Execution failed: {}'.format(e))
 
@@ -91,7 +94,8 @@ def is_blank(filename):
 
     c = 'identify -verbose %s' % filename
     result = run_cmd(c)
-    mStdDev = re.compile(b'\s*standard deviation:\s*\d+\.\d+\s*\((?P<percent>\d+\.\d+)\).*')
+    mStdDev = re.compile(
+        b'\s*standard deviation:\s*\d+\.\d+\s*\((?P<percent>\d+\.\d+)\).*')
 
     for line in result.splitlines():
         match = mStdDev.search(line)
@@ -133,3 +137,16 @@ def merge_pdfs(inputs, output):
 
     with open(output, 'wb') as f:
         merger.write(f)
+
+
+def ocr(filename, language):
+    """Perform OCR on file using Tesseract.
+
+    :param string filename: file to perform OCR on
+    :param string language: language(s) expected to be used in file
+    """
+    base_output_name = filename[:-4]
+    command = 'tesseract {} {} -l {} pdf'.format(filename,
+                                                 base_output_name,
+                                                 language)
+    run_cmd(command)
