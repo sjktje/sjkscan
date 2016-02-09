@@ -132,7 +132,10 @@ def merge_pdfs(inputs, output):
     input_fds = dict()
 
     for filename in inputs:
-        input_fds[filename] = open(filename, 'rb')
+        try:
+            input_fds[filename] = open(filename, 'rb')
+        except OSError as e:
+            print('Error opening {}: {}'.format(filename, e))
         merger.append(input_fds[filename])
 
     with open(output, 'wb') as f:
