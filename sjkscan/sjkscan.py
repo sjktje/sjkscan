@@ -6,6 +6,8 @@ import re
 import subprocess
 
 from wand.image import Image
+from PyPDF2 import PdfFileMerger
+
 
 def run_cmd(args):
     """Run shell command and return its output.
@@ -114,3 +116,20 @@ def remove_if_blank(filename):
         os.remove(filename)
 
 
+def merge_pdfs(inputs, output):
+    """Merge selected pdfs.
+
+    :param list inputs: files to concatenate
+    :param string output: name of file to write
+
+    """
+    merger = PdfFileMerger()
+
+    input_fds = dict()
+
+    for filename in inputs:
+        input_fds[filename] = open(filename, 'rb')
+        merger.append(input_fds[filename])
+
+    with open(output, 'wb') as f:
+        merger.write(f)
