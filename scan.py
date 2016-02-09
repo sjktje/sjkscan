@@ -1,21 +1,23 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
-from sjkscan import *
+from sjkscan import sjkscan
+import os
 
 
 def main():
     """TODO: docstring"""
-    output_dir = 'output'
-    scan(output_dir)
 
-    for f in os.scandir(output_dir):
-        if not f.is_file():
+    files_to_merge = []
+
+    for file in os.scandir('/Users/sjk/scan/'):
+        if not file.is_file():
             next
-        remove_if_blank(os.path.join(output_dir, f.name))
+        if (file.name[:4] != '.pdf'):
+            next
+        files_to_merge.append(os.path.join('/Users/sjk/scan', file.name))
 
-
-    rotate_all_images_in_dir(output_dir, 180)
+    sjkscan.merge_pdfs(files_to_merge, '/Users/sjk/Code/scan/output.pdf')
 
 
 if __name__ == '__main__':
