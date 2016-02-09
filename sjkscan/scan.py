@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
-from utils import run_cmd
+from . import utils
 
 
 def scan(output_directory):
@@ -23,4 +23,4 @@ def scan(output_directory):
         '-v'
     ]
 
-    run_cmd(command)
+    utils.run_cmd(command)
