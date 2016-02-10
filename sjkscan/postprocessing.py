@@ -1,9 +1,12 @@
 import os
 import re
+import shutil
+import time
 
+from .utils import config, read_config
 from .utils import run_cmd
-from wand.image import Image
 from PyPDF2 import PdfFileMerger
+from wand.image import Image
 
 
 def rotate_image(filename, degrees):
@@ -30,6 +33,36 @@ def rotate_all_images_in_dir(dirname, degrees):
         if not f.is_file():
             continue
         rotate_image(os.path.join(dirname, f.name), degrees)
+
+
+def unpaper(filename):
+    """Process file with unpaper and delete original.
+
+    :param filename: TODO
+
+    """
+    unpapered_filename = filename + '.unpapered'
+    # TODO: We don't use unpaper's --overwrite because it currently seems to be
+    # broken. Once it's been fixed, just --overwrite the original.
+    run_cmd('unpaper --size a4 "{}" "{}"'.format(filename, unpapered_filename))
+    shutil.move(unpapered_filename, filename)
+
+
+def unpaper_dir(directory, extension=None):
+    """Run unpaper on all files with given extension in directory
+
+    :param string directory: directory to process
+    :param string extension: extension of files to run unpaper on
+
+    """
+
+    for f in os.scandir(directory):
+        if not f.is_file():
+            continue
+        if extension and not f.name.endswith('.' + extension):
+            continue
+
+        unpaper(os.path.join(directory, f.name))
 
 
 def is_blank(filename):
@@ -61,6 +94,35 @@ def is_blank(filename):
                 return False
 
     return True
+
+
+def move_blanks(input_dir, output_dir):
+    """Move blank .pnm's in input_dir to output_dir
+
+    :param string input_dir: directory to check for blank .pnm files
+    :param string output_dir: where to move blank .pnm files
+    :returns: number of blank pages moved
+    :rtype: int
+
+    """
+    number_of_blanks = 0
+
+    for entry in os.scandir(input_dir):
+        if not entry.is_file() or not entry.name.endswith('.pnm'):
+            continue
+
+        image = os.path.join(input_dir, entry.name)
+
+        if is_blank(image):
+            try:
+                os.mkdir(output_dir)
+            except:
+                pass  # Assume directory exists.
+
+            shutil.move(image, output_dir)
+            number_of_blanks += 1
+
+    return number_of_blanks
 
 
 def remove_if_blank(filename):
@@ -145,3 +207,47 @@ def ocr_pnms_in_dir(directory, language):
         if file.name[-4:] != '.pnm':
             continue
         ocr(os.path.join(directory, file.name), language)
+
+
+def scand():
+    """
+    Polls DATA_DIR for finished scans. Once found, scand will:
+
+        - Move blank images to subdir blank/
+        - Rotate remaining images
+        - OCR remaining images
+        - Merge resulting pdf files
+        - Move the directory to INBOX
+
+    """
+
+    read_config()
+
+    while True:
+        for entry in os.scandir(config['Paths']['data']):
+            if entry.name.endswith('.unfinished') or not entry.is_dir() or entry.name == 'INBOX':
+                continue
+
+            scan_dir = os.path.join(config['Paths']['data'], entry.name)
+
+            move_blanks(scan_dir, os.path.join(scan_dir, 'blank'))
+
+            rotate_all_images_in_dir(scan_dir, 180)
+
+            unpaper_dir(scan_dir, 'pnm')
+
+            ocr_pnms_in_dir(scan_dir, 'swe')
+
+            pdf_output = os.path.join(scan_dir, 'output.pdf')
+            merge_pdfs_in_dir(scan_dir, pdf_output)
+
+            inbox_dir = os.path.join(config['Paths']['data'], 'INBOX')
+
+            try:
+                os.mkdir(inbox_dir)
+            except:
+                pass  # Assume directory exists.
+
+            shutil.move(scan_dir, inbox_dir)
+
+        time.sleep(1)
