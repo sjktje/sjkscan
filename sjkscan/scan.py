@@ -29,8 +29,11 @@ def run_scan(output_directory):
 
 
 def scan():
-    """TODO: Docstring for scan.
-    :returns: TODO
+    """
+    Scan documents.
+
+    Documents are placed in data_dir/YYYY-MM-DD_HH-MM-SS.unfinished.
+    Once the scan has been completed, the '.unfinished' is removed.
 
     """
     config = {
