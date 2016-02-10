@@ -1,6 +1,7 @@
 import os
 import re
 import shutil
+import time
 
 from .utils import run_cmd
 from wand.image import Image
@@ -175,3 +176,37 @@ def ocr_pnms_in_dir(directory, language):
         if file.name[-4:] != '.pnm':
             continue
         ocr(os.path.join(directory, file.name), language)
+
+
+def scand():
+    """TODO: Docstring for scand.
+    :returns: TODO
+
+    """
+    DATA_DIR = '/Users/sjk/Code/sjkscan/data'
+    while True:
+        for entry in os.scandir(DATA_DIR):
+            if entry.name.endswith('.unfinished') or not entry.is_dir():
+                continue
+
+            scan_dir = os.path.join(DATA_DIR, entry.name)
+
+            move_blanks(scan_dir, os.path.join(scan_dir, 'blank'))
+
+            rotate_all_images_in_dir(scan_dir, 180)
+
+            ocr_pnms_in_dir(scan_dir, 'swe')
+
+            pdf_output = os.path.join(scan_dir, 'output.pdf')
+            merge_pdfs_in_dir(scan_dir, pdf_output)
+
+            inbox_dir = os.path.join(DATA_DIR, 'INBOX')
+
+            try:
+                os.mkdir(inbox_dir)
+            except:
+                pass  # Assume directory exists.
+
+            shutil.move(scan_dir, inbox_dir)
+
+        time.sleep(1)

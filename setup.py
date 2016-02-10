@@ -14,7 +14,8 @@ setup(
     license='BSD',
     entry_points={
         'console_scripts': [
-            'scan = sjkscan.scan:scan'
+            'scan = sjkscan.scan:scan',
+            'scand = sjkscan.postprocessing:scand'
         ]
     }
 )
