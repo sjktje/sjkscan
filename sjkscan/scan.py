@@ -1,10 +1,12 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
+import os
+from datetime import datetime
 from . import utils
 
 
-def scan(output_directory):
+def run_scan(output_directory):
     """Run scanimage in batch mode.
 
     :param string output_directory: directory to write scanned images to
@@ -24,3 +26,30 @@ def scan(output_directory):
     ]
 
     utils.run_cmd(command)
+
+
+def scan():
+    """TODO: Docstring for scan.
+    :returns: TODO
+
+    """
+    config = {
+        'data_dir': '/Users/sjk/Code/sjkscan/data'
+    }
+
+    timestamp = datetime.today().strftime('%Y-%m-%d_%H-%M-%S')
+    unfinished = os.path.join(config['data_dir'], timestamp + '.unfinished')
+    finished = os.path.join(config['data_dir'], timestamp)
+    output_dir = os.path.join(config['data_dir'], unfinished)
+
+    try:
+        os.mkdir(output_dir)
+    except OSError as e:
+        print('Could not create {}: {}', output_dir, e)
+
+    run_scan(output_dir)
+
+    try:
+        os.rename(unfinished, finished)
+    except OSError as e:
+        print('Could not rename {} to {}: {}', unfinished, finished, e)
