@@ -62,6 +62,7 @@ def read_config(config_file=None):
     config['Paths'] = dict()
     config['OCR'] = dict()
     config['Rotation'] = dict()
+    config['Scanimage'] = dict()
 
     config['Paths']['data'] = conf['Paths'].get('data', '/Users/sjk/Code/sjkscan/data')
     config['Paths']['dir_format'] = conf['Paths'].get('dir_format', '%Y-%m-%d_%H-%M-%S')
@@ -71,3 +72,7 @@ def read_config(config_file=None):
     config['OCR']['language'] = conf['OCR'].get('language', 'swe')
 
     config['Rotation']['rotate'] = conf['Rotation'].get('rotate', '180')
+
+    config['Scanimage']['resolution'] = conf['Scanimage'].get('resolution', 300)
+    config['Scanimage']['brightness'] = conf['Scanimage'].get('brightness', 80)
+    config['Scanimage']['contrast'] = conf['Scanimage'].get('contrast', 100)

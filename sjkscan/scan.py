@@ -17,12 +17,12 @@ def run_scan(output_directory):
 
     command = [
         'scanimage',
-        '--resolution 300',
+        '--resolution {}'.format(config['Scanimage']['resolution']),
         '--batch={}/scan_%03d.pnm'.format(output_directory),
         '--format=pnm',
         '--mode Gray',
-        '--brightness 80',
-        '--contrast 100',
+        '--brightness {}'.format(config['Scanimage']['brightness']),
+        '--contrast {}'.format(config['Scanimage']['contrast']),
         '--source "ADF Duplex"',
         '-v'
     ]
@@ -42,9 +42,9 @@ def scan():
     read_config()
 
     timestamp = datetime.today().strftime('%Y-%m-%d_%H-%M-%S')
-    unfinished = os.path.join(config['Paths']['data_dir'], timestamp + '.unfinished')
-    finished = os.path.join(config['Paths']['data_dir'], timestamp)
-    output_dir = os.path.join(config['Paths']['data_dir'], unfinished)
+    unfinished = os.path.join(config['Paths']['data'], timestamp + '.unfinished')
+    finished = os.path.join(config['Paths']['data'], timestamp)
+    output_dir = os.path.join(config['Paths']['data'], unfinished)
 
     try:
         os.mkdir(output_dir)
