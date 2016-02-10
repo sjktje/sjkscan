@@ -179,8 +179,14 @@ def ocr_pnms_in_dir(directory, language):
 
 
 def scand():
-    """TODO: Docstring for scand.
-    :returns: TODO
+    """
+    Polls DATA_DIR for finished scans. Once found, scand will:
+
+        - Move blank images to subdir blank/
+        - Rotate remaining images
+        - OCR remaining images
+        - Merge resulting pdf files
+        - Move the directory to INBOX
 
     """
     DATA_DIR = '/Users/sjk/Code/sjkscan/data'
