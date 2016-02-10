@@ -21,10 +21,10 @@ def run_cmd(args):
     print("Running: {}".format(args))
 
     try:
-        result = subprocess.check_output(
+        result = subprocess.run(
             args,
-            stderr=subprocess.STDOUT,
-            shell=True)
+            stdout=subprocess.PIPE,
+            shell=True).stdout
     except OSError as e:
         print('Execution failed: {}'.format(e))
 

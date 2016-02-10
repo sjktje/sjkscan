@@ -41,8 +41,11 @@ def unpaper(filename):
     :param filename: TODO
 
     """
-    run_cmd('unpaper --size a4 --overwrite "{}" {}'.format(filename, filename + '.unpapered'))
-    shutil.move(filename + '.unpapered', filename)
+    unpapered_filename = filename + '.unpapered'
+    # TODO: We don't use unpaper's --overwrite because it currently seems to be
+    # broken. Once it's been fixed, just --overwrite the original.
+    run_cmd('unpaper --size a4 "{}" "{}"'.format(filename, unpapered_filename))
+    shutil.move(unpapered_filename, filename)
 
 
 def unpaper_dir(directory, extension=None):
@@ -59,7 +62,7 @@ def unpaper_dir(directory, extension=None):
         if extension and not f.name.endswith('.' + extension):
             continue
 
-        unpaper(f.name)
+        unpaper(os.path.join(directory, f.name))
 
 
 def is_blank(filename):
@@ -231,7 +234,7 @@ def scand():
 
             rotate_all_images_in_dir(scan_dir, 180)
 
-            unpaper_dir(scan_dir, '.pnm')
+            unpaper_dir(scan_dir, 'pnm')
 
             ocr_pnms_in_dir(scan_dir, 'swe')
 
