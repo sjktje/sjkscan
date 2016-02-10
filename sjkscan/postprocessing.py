@@ -41,8 +41,9 @@ def unpaper(filename):
     :param filename: TODO
 
     """
-    run_cmd('unpaper --size a4 --overwrite "{}" {}'.format(filename, filename + '.unpapered'))
-    shutil.move(filename + '.unpapered', filename)
+    unpapered_filename = filename + '.unpapered'
+    run_cmd('unpaper --size a4 "{}" "{}"'.format(filename, unpapered_filename))
+    shutil.move(unpapered_filename, filename)
 
 
 def unpaper_dir(directory, extension=None):
@@ -231,7 +232,7 @@ def scand():
 
             rotate_all_images_in_dir(scan_dir, 180)
 
-            unpaper_dir(scan_dir, '.pnm')
+            unpaper_dir(scan_dir, 'pnm')
 
             ocr_pnms_in_dir(scan_dir, 'swe')
 
