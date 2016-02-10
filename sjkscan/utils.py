@@ -2,6 +2,8 @@ import configparser
 import os
 import subprocess
 
+config = dict()
+
 
 def run_cmd(args):
     """Run shell command and return its output.
@@ -27,8 +29,8 @@ def run_cmd(args):
     return result
 
 
-def read_conf(config_file=None):
-    """Read and return config.
+def read_config(config_file=None):
+    """Read and populate utils.config
 
     The following files will be tried (in order):
         - sjkscan.conf (current directory)
@@ -36,9 +38,14 @@ def read_conf(config_file=None):
         - /etc/sjkscan/sjkscan.conf
         - /usr/local/etc/sjkscan/sjkscan.conf
 
-    :param string config_file: optional filename to read, defaults to above configs otherwise.
-    :returns: dict containing subdicts named after config file sections. Example: dict['Paths']['data'].
+    Config values can be accessed from within other modules:
 
+        from utils import config
+        print(config['Paths'].get('data'))
+
+    given that read_conf() has been called sometime before.
+
+    :param string config_file: optional filename to read, defaults to above configs otherwise.
     """
     conf = configparser.ConfigParser()
 
@@ -52,18 +59,15 @@ def read_conf(config_file=None):
             '/usr/local/etc/sjkscan/sjkscan.conf'
         ])
 
-    out = dict()
-    out['Paths'] = dict()
-    out['OCR'] = dict()
-    out['Rotation'] = dict()
+    config['Paths'] = dict()
+    config['OCR'] = dict()
+    config['Rotation'] = dict()
 
-    out['Paths']['data'] = conf['Paths'].get('data', '/Users/sjk/Code/sjkscan/data')
-    out['Paths']['dir_format'] = conf['Paths'].get('dir_format', '%Y-%m-%d_%H-%M-%S')
-    out['Paths']['inbox'] = conf['Paths'].get('inbox', '%(data)s/INBOX')
-    out['Paths']['merged'] = conf['Paths'].get('merged', '%(data)s/merged')
+    config['Paths']['data'] = conf['Paths'].get('data', '/Users/sjk/Code/sjkscan/data')
+    config['Paths']['dir_format'] = conf['Paths'].get('dir_format', '%Y-%m-%d_%H-%M-%S')
+    config['Paths']['inbox'] = conf['Paths'].get('inbox', '%(data)s/INBOX')
+    config['Paths']['merged'] = conf['Paths'].get('merged', '%(data)s/merged')
 
-    out['OCR']['language'] = conf['OCR'].get('language', 'swe')
+    config['OCR']['language'] = conf['OCR'].get('language', 'swe')
 
-    out['Rotation']['rotate'] = conf['Rotation'].get('rotate', '180')
-
-    return out
+    config['Rotation']['rotate'] = conf['Rotation'].get('rotate', '180')

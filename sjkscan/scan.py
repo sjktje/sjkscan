@@ -3,7 +3,9 @@
 
 import os
 from datetime import datetime
-from . import utils
+from .utils import config
+from .utils import read_config
+from .utils import run_cmd
 
 
 def run_scan(output_directory):
@@ -25,7 +27,7 @@ def run_scan(output_directory):
         '-v'
     ]
 
-    utils.run_cmd(command)
+    run_cmd(command)
 
 
 def scan():
@@ -36,14 +38,13 @@ def scan():
     Once the scan has been completed, the '.unfinished' is removed.
 
     """
-    config = {
-        'data_dir': '/Users/sjk/Code/sjkscan/data'
-    }
+
+    read_config()
 
     timestamp = datetime.today().strftime('%Y-%m-%d_%H-%M-%S')
-    unfinished = os.path.join(config['data_dir'], timestamp + '.unfinished')
-    finished = os.path.join(config['data_dir'], timestamp)
-    output_dir = os.path.join(config['data_dir'], unfinished)
+    unfinished = os.path.join(config['Paths']['data_dir'], timestamp + '.unfinished')
+    finished = os.path.join(config['Paths']['data_dir'], timestamp)
+    output_dir = os.path.join(config['Paths']['data_dir'], unfinished)
 
     try:
         os.mkdir(output_dir)

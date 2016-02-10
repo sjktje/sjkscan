@@ -3,9 +3,10 @@ import re
 import shutil
 import time
 
+from .utils import config, read_config
 from .utils import run_cmd
-from wand.image import Image
 from PyPDF2 import PdfFileMerger
+from wand.image import Image
 
 
 def rotate_image(filename, degrees):
@@ -216,13 +217,15 @@ def scand():
         - Move the directory to INBOX
 
     """
-    DATA_DIR = '/Users/sjk/Code/sjkscan/data'
+
+    read_config()
+
     while True:
-        for entry in os.scandir(DATA_DIR):
+        for entry in os.scandir(config['Paths']['data']):
             if entry.name.endswith('.unfinished') or not entry.is_dir() or entry.name == 'INBOX':
                 continue
 
-            scan_dir = os.path.join(DATA_DIR, entry.name)
+            scan_dir = os.path.join(config['Paths']['data'], entry.name)
 
             move_blanks(scan_dir, os.path.join(scan_dir, 'blank'))
 
@@ -235,7 +238,7 @@ def scand():
             pdf_output = os.path.join(scan_dir, 'output.pdf')
             merge_pdfs_in_dir(scan_dir, pdf_output)
 
-            inbox_dir = os.path.join(DATA_DIR, 'INBOX')
+            inbox_dir = os.path.join(config['Paths']['data'], 'INBOX')
 
             try:
                 os.mkdir(inbox_dir)
