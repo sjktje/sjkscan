@@ -16,5 +16,10 @@ setup(
             'scan = sjkscan.scan:scan',
             'scand = sjkscan.postprocessing:scand'
         ]
-    }
+    },
+    classifiers=[
+        'Development Status :: 3 - Alpha',
+        'License :: OSI Approved :: BSD License',
+        'Programming Language :: Python :: 3'
+    ]
 )
