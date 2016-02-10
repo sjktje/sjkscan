@@ -42,6 +42,8 @@ def unpaper(filename):
 
     """
     unpapered_filename = filename + '.unpapered'
+    # TODO: We don't use unpaper's --overwrite because it currently seems to be
+    # broken. Once it's been fixed, just --overwrite the original.
     run_cmd('unpaper --size a4 "{}" "{}"'.format(filename, unpapered_filename))
     shutil.move(unpapered_filename, filename)
 
@@ -60,7 +62,7 @@ def unpaper_dir(directory, extension=None):
         if extension and not f.name.endswith('.' + extension):
             continue
 
-        unpaper(f.name)
+        unpaper(os.path.join(directory, f.name))
 
 
 def is_blank(filename):
