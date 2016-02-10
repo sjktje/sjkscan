@@ -1,6 +1,8 @@
 import configparser
-import os
 import subprocess
+
+from pkg_resources import resource_string
+
 
 config = dict()
 
@@ -32,12 +34,6 @@ def run_cmd(args):
 def read_config(config_file=None):
     """Read and populate utils.config
 
-    The following files will be tried (in order):
-        - sjkscan.conf (current directory)
-        - ~/.sjkscan.conf
-        - /etc/sjkscan/sjkscan.conf
-        - /usr/local/etc/sjkscan/sjkscan.conf
-
     Config values can be accessed from within other modules:
 
         from utils import config
@@ -45,19 +41,15 @@ def read_config(config_file=None):
 
     given that read_conf() has been called sometime before.
 
-    :param string config_file: optional filename to read, defaults to above configs otherwise.
+    :param string config_file: optional filename to read, otherwise looks for sjkscan.conf in bundle.
+
     """
     conf = configparser.ConfigParser()
 
     if config_file:
         conf.read(config_file)
     else:
-        conf.read([
-            'sjkscan.conf',
-            os.path.expanduser('~/.sjkscan.conf'),
-            '/etc/sjkscan/sjkscan.conf',
-            '/usr/local/etc/sjkscan/sjkscan.conf'
-        ])
+        conf.read_string(resource_string(__name__, 'sjkscan.conf').decode('utf-8'))
 
     config['Paths'] = dict()
     config['OCR'] = dict()
