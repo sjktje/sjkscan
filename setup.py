@@ -7,7 +7,6 @@ setup(
     name='sjkscan',
     version='0.1.1a',
     packages=['sjkscan'],
-    scripts=['scripts/scan.py', 'scripts/scand.py'],
     author=u'Svante Kvarnström',
     author_email='sjk@sjk.io',
     url='https://github.com/sjktje/sjkscan/',
