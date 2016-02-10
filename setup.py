@@ -9,5 +9,12 @@ setup(
     packages=['sjkscan'],
     author=u'Svante Kvarnström',
     author_email='sjk@sjk.io',
-    license='BSD'
+    url='https://github.com/sjktje/sjkscan/',
+    license='BSD',
+    entry_points={
+        'console_scripts': [
+            'scan = sjkscan.scan:scan',
+            'scand = sjkscan.postprocessing:scand'
+        ]
+    }
 )
