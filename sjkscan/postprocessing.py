@@ -34,6 +34,33 @@ def rotate_all_images_in_dir(dirname, degrees):
         rotate_image(os.path.join(dirname, f.name), degrees)
 
 
+def unpaper(filename):
+    """Process file with unpaper and delete original.
+
+    :param filename: TODO
+
+    """
+    run_cmd('unpaper --size a4 --overwrite "{}" {}'.format(filename, filename + '.unpapered'))
+    shutil.move(filename + '.unpapered', filename)
+
+
+def unpaper_dir(directory, extension=None):
+    """Run unpaper on all files with given extension in directory
+
+    :param string directory: directory to process
+    :param string extension: extension of files to run unpaper on
+
+    """
+
+    for f in os.scandir(directory):
+        if not f.is_file():
+            continue
+        if extension and not f.name.endswith('.' + extension):
+            continue
+
+        unpaper(f.name)
+
+
 def is_blank(filename):
     """
     Check if image is blank.
@@ -200,6 +227,8 @@ def scand():
             move_blanks(scan_dir, os.path.join(scan_dir, 'blank'))
 
             rotate_all_images_in_dir(scan_dir, 180)
+
+            unpaper_dir(scan_dir, '.pnm')
 
             ocr_pnms_in_dir(scan_dir, 'swe')
 
