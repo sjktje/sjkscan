@@ -186,7 +186,7 @@ def scand():
     DATA_DIR = '/Users/sjk/Code/sjkscan/data'
     while True:
         for entry in os.scandir(DATA_DIR):
-            if entry.name.endswith('.unfinished') or not entry.is_dir():
+            if entry.name.endswith('.unfinished') or not entry.is_dir() or entry.name == 'INBOX':
                 continue
 
             scan_dir = os.path.join(DATA_DIR, entry.name)
