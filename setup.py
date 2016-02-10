@@ -7,6 +7,9 @@ setup(
     name='sjkscan',
     version='0.1.1a',
     packages=['sjkscan'],
+    package_data={
+        'sjkscan': ['sjkscan.conf']
+    },
     author=u'Svante Kvarnström',
     author_email='sjk@sjk.io',
     url='https://github.com/sjktje/sjkscan/',
