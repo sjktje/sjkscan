@@ -2,10 +2,11 @@
 # -*- coding: utf-8 -*-
 
 from setuptools import setup
+import sjkscan
 
 setup(
     name='sjkscan',
-    version='0.1.1a',
+    version=sjkscan.__version__,
     packages=['sjkscan'],
     package_data={
         'sjkscan': ['sjkscan.conf']
