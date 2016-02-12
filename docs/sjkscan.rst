@@ -4,14 +4,14 @@ sjkscan package
 Submodules
 ----------
 
-sjkscan.scan module
--------------------
+sjkscan.config module
+---------------------
 
-.. automodule:: sjkscan.scan
+
+.. automodule:: sjkscan.config
     :members:
     :undoc-members:
     :show-inheritance:
-
 
 sjkscan.postprocessing module
 -----------------------------
@@ -22,6 +22,13 @@ sjkscan.postprocessing module
     :undoc-members:
     :show-inheritance:
 
+sjkscan.scan module
+-------------------
+
+.. automodule:: sjkscan.scan
+    :members:
+    :undoc-members:
+    :show-inheritance:
 
 sjkscan.utils module
 --------------------
@@ -31,3 +38,4 @@ sjkscan.utils module
     :members:
     :undoc-members:
     :show-inheritance:
+
