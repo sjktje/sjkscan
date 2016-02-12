@@ -3,7 +3,7 @@ import re
 import shutil
 import time
 
-from .utils import config, read_config
+from .config import config, load_config
 from .utils import run_cmd
 from PyPDF2 import PdfFileMerger
 from wand.image import Image
@@ -221,7 +221,7 @@ def scand():
 
     """
 
-    read_config()
+    load_config()
 
     while True:
         for entry in os.scandir(config['Paths']['data']):
