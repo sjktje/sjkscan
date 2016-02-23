@@ -100,11 +100,8 @@ def move_blanks(input_dir, output_dir):
     """
     number_of_blanks = 0
 
-    for entry in os.scandir(input_dir):
-        if not entry.is_file() or not entry.name.endswith('.pnm'):
-            continue
-
-        image = os.path.join(input_dir, entry.name)
+    for file in files(input_dir, 'pnm'):
+        image = os.path.join(input_dir, file)
 
         if is_blank(image):
             try:
