@@ -29,6 +29,13 @@ class TestFiles(unittest.TestCase):
             pnms.append(f)
         self.assertNotIn('test3.jpg', pnms)
 
+    def test_listing_all_dot_pnms(self):
+        pnms = []
+        expected = ['test1.pnm', 'test2.pnm']
+        for f in files(self.temp_dir, '.pnm'):
+            pnms.append(f)
+        self.assertEqual(pnms, expected)
+
     def test_listing_all_files(self):
         all = []
         for f in files(self.temp_dir):
