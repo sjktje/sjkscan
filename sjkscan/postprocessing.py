@@ -159,13 +159,8 @@ def merge_pdfs_in_dir(directory, output):
     """
     files_to_merge = []
 
-    for file in os.scandir(directory):
-        if not file.is_file():
-            continue
-        if file.name[-4:] != '.pdf':
-            continue
-
-        files_to_merge.append(os.path.join(directory, file.name))
+    for pdf in files(directory, 'pdf'):
+        files_to_merge.append(os.path.join(directory, pdf))
 
     merge_pdfs(files_to_merge, output)
 
