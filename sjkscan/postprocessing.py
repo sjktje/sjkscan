@@ -54,13 +54,8 @@ def unpaper_dir(directory, extension=None):
 
     """
 
-    for f in os.scandir(directory):
-        if not f.is_file():
-            continue
-        if extension and not f.name.endswith('.' + extension):
-            continue
-
-        unpaper(os.path.join(directory, f.name))
+    for f in files(directory, extension):
+        unpaper(os.path.oin(directory, f.name))
 
 
 def is_blank(filename):
