@@ -186,12 +186,8 @@ def ocr_pnms_in_dir(directory, language):
     :param string language: language(s) expected to be used in files
 
     """
-    for file in os.scandir(directory):
-        if not file.is_file():
-            continue
-        if file.name[-4:] != '.pnm':
-            continue
-        ocr(os.path.join(directory, file.name), language)
+    for file in files(directory, 'pnm'):
+        ocr(os.path.join(directory, file), language)
 
 
 def scand():
