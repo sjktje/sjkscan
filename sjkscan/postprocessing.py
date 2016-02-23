@@ -4,7 +4,7 @@ import shutil
 import time
 
 from .config import config, load_config
-from .utils import run_cmd
+from .utils import run_cmd, files
 from PyPDF2 import PdfFileMerger
 from wand.image import Image
 
@@ -29,9 +29,7 @@ def rotate_all_images_in_dir(dirname, degrees):
     :param int degrees: number of degrees to rotate
 
     """
-    for f in os.scandir(dirname):
-        if not f.is_file():
-            continue
+    for f in files(dirname):
         rotate_image(os.path.join(dirname, f.name), degrees)
 
 
