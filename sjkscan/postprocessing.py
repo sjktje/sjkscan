@@ -4,7 +4,7 @@ import shutil
 import time
 
 from .config import config, load_config
-from .utils import run_cmd
+from .utils import run_cmd, files
 from PyPDF2 import PdfFileMerger
 from wand.image import Image
 
@@ -29,10 +29,8 @@ def rotate_all_images_in_dir(dirname, degrees):
     :param int degrees: number of degrees to rotate
 
     """
-    for f in os.scandir(dirname):
-        if not f.is_file():
-            continue
-        rotate_image(os.path.join(dirname, f.name), degrees)
+    for f in files(dirname):
+        rotate_image(os.path.join(dirname, f), degrees)
 
 
 def unpaper(filename):
@@ -56,13 +54,8 @@ def unpaper_dir(directory, extension=None):
 
     """
 
-    for f in os.scandir(directory):
-        if not f.is_file():
-            continue
-        if extension and not f.name.endswith('.' + extension):
-            continue
-
-        unpaper(os.path.join(directory, f.name))
+    for f in files(directory, extension):
+        unpaper(os.path.join(directory, f))
 
 
 def is_blank(filename):
@@ -107,11 +100,8 @@ def move_blanks(input_dir, output_dir):
     """
     number_of_blanks = 0
 
-    for entry in os.scandir(input_dir):
-        if not entry.is_file() or not entry.name.endswith('.pnm'):
-            continue
-
-        image = os.path.join(input_dir, entry.name)
+    for file in files(input_dir, 'pnm'):
+        image = os.path.join(input_dir, file)
 
         if is_blank(image):
             try:
@@ -169,13 +159,8 @@ def merge_pdfs_in_dir(directory, output):
     """
     files_to_merge = []
 
-    for file in os.scandir(directory):
-        if not file.is_file():
-            continue
-        if file.name[-4:] != '.pdf':
-            continue
-
-        files_to_merge.append(os.path.join(directory, file.name))
+    for pdf in files(directory, 'pdf'):
+        files_to_merge.append(os.path.join(directory, pdf))
 
     merge_pdfs(files_to_merge, output)
 
@@ -201,12 +186,8 @@ def ocr_pnms_in_dir(directory, language):
     :param string language: language(s) expected to be used in files
 
     """
-    for file in os.scandir(directory):
-        if not file.is_file():
-            continue
-        if file.name[-4:] != '.pnm':
-            continue
-        ocr(os.path.join(directory, file.name), language)
+    for file in files(directory, 'pnm'):
+        ocr(os.path.join(directory, file), language)
 
 
 def scand():
