@@ -4,7 +4,7 @@ import shutil
 import time
 
 from .config import config, load_config
-from .utils import run_cmd, files
+from .utils import run_cmd, files, move
 from PyPDF2 import PdfFileMerger
 from wand.image import Image
 
@@ -43,7 +43,7 @@ def unpaper(filename):
     # TODO: We don't use unpaper's --overwrite because it currently seems to be
     # broken. Once it's been fixed, just --overwrite the original.
     run_cmd('unpaper --size a4 "{}" "{}"'.format(filename, unpapered_filename))
-    shutil.move(unpapered_filename, filename)
+    move(unpapered_filename, filename)
 
 
 def unpaper_dir(directory, extension=None):
@@ -109,7 +109,7 @@ def move_blanks(input_dir, output_dir):
             except:
                 pass  # Assume directory exists.
 
-            shutil.move(image, output_dir)
+            move(image, output_dir)
             number_of_blanks += 1
 
     return number_of_blanks
@@ -229,6 +229,6 @@ def scand():
             except:
                 pass  # Assume directory exists.
 
-            shutil.move(scan_dir, inbox_dir)
+            move(scan_dir, inbox_dir)
 
         time.sleep(1)
