@@ -39,6 +39,7 @@ def load_config(config_file=None):
         ]
     }
 
+    # conf = configparser.ConfigParser(interpolation=configparser.BasicInterpolation())
     conf = configparser.ConfigParser()
 
     if config_file:
@@ -49,4 +50,4 @@ def load_config(config_file=None):
     for section in config_template:
         config[section] = dict()
         for entry, default in config_template[section]:
-            config[section][entry] = default
+            config[section][entry] = conf.get(section, entry, fallback=default)
