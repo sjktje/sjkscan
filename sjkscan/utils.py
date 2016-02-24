@@ -58,3 +58,14 @@ def move(old, new):
     # TODO: This should be a logger statement.
     print('Move: {} -> {}'.format(old, new))
     shutil.move(old, new)
+
+
+def remove(file):
+    """Remove file.
+
+    :param file: file to remove
+
+    """
+    # TODO: This should be a logger statement.
+    print('Remove: {}'.format(file))
+    os.remove(file)
