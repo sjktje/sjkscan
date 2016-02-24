@@ -24,7 +24,7 @@ def load_config(config_file=None):
             ('data', '/Users/sjk/Code/sjkscan/data'),
             ('dir_format', '%Y-%m-%d_%H-%M-%S'),
             ('inbox', '%(data)s/INBOX'),
-            ('merged', '%(data)s/merged')
+            ('archive', '%(data)s/ARCHIVE')
         ],
         'OCR': [
             ('language', 'swe')
