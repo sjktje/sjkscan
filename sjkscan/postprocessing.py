@@ -4,7 +4,7 @@ import shutil
 import time
 
 from .config import config, load_config
-from .utils import run_cmd, files, move
+from .utils import run_cmd, files, move, remove
 from PyPDF2 import PdfFileMerger
 from wand.image import Image
 
@@ -126,7 +126,7 @@ def remove_if_blank(filename):
     """
     if is_blank(filename):
         print('Removing (probably) blank page {}'.format(filename))
-        os.remove(filename)
+        remove(filename)
 
 
 def merge_pdfs(inputs, output):
