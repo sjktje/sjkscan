@@ -1,6 +1,5 @@
 import os
 import re
-import shutil
 import time
 
 from .config import config, load_config
@@ -219,16 +218,16 @@ def scand():
 
             ocr_pnms_in_dir(scan_dir, 'swe')
 
-            pdf_output = os.path.join(scan_dir, 'output.pdf')
+            pdf_output = os.path.join(config['Paths']['inbox'], '{}.pdf'.format(scan_dir))
             merge_pdfs_in_dir(scan_dir, pdf_output)
 
-            inbox_dir = os.path.join(config['Paths']['data'], 'INBOX')
+            archive_dir = config['Paths']['archive']
 
             try:
-                os.mkdir(inbox_dir)
+                os.mkdir(archive_dir)
             except:
                 pass  # Assume directory exists.
 
-            move(scan_dir, inbox_dir)
+            move(scan_dir, archive_dir)
 
         time.sleep(1)
