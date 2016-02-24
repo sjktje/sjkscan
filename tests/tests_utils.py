@@ -6,7 +6,7 @@ import shutil
 import tempfile
 import unittest
 
-from sjkscan.utils import files
+from sjkscan.utils import files, move
 
 
 class TestFiles(unittest.TestCase):
@@ -50,6 +50,21 @@ class TestFiles(unittest.TestCase):
         for f in files(self.temp_dir):
             all.append(f)
         self.assertEqual(self.test_files, all)
+
+    def tearDown(self):
+        shutil.rmtree(self.temp_dir)
+
+
+class TestMove(unittest.TestCase):
+    def setUp(self):
+        self.temp_dir = tempfile.mkdtemp()
+        self.test_file = os.path.join(self.temp_dir, 'test.txt')
+        open(self.test_file, 'a').close()
+
+    def test_if_file_can_be_moved(self):
+        new_test_file = os.path.join(self.temp_dir, 'test2.txt')
+        move(self.test_file, new_test_file)
+        self.assertTrue(os.path.exists(new_test_file))
 
     def tearDown(self):
         shutil.rmtree(self.temp_dir)
