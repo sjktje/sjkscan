@@ -1,4 +1,5 @@
 import os
+import shutil
 import subprocess
 
 
@@ -45,3 +46,15 @@ def files(dir, ext=None):
         if ext and not f.name.endswith('.{}'.format(ext.lstrip('.'))):
             continue
         yield f.name
+
+
+def move(old, new):
+    """Move file
+
+    :param old: file to move
+    :param new: new location/filename
+
+    """
+    # TODO: This should be a logger statement.
+    print('Move: {} -> {}'.format(old, new))
+    shutil.move(old, new)
