@@ -30,7 +30,7 @@ def rotate_all_images_in_dir(dirname, degrees):
 
     """
     for f in files(dirname):
-        rotate_image(os.path.join(dirname, f.name), degrees)
+        rotate_image(os.path.join(dirname, f), degrees)
 
 
 def unpaper(filename):
@@ -55,7 +55,7 @@ def unpaper_dir(directory, extension=None):
     """
 
     for f in files(directory, extension):
-        unpaper(os.path.oin(directory, f.name))
+        unpaper(os.path.join(directory, f))
 
 
 def is_blank(filename):
