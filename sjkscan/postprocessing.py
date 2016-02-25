@@ -3,7 +3,7 @@ import re
 import time
 
 from .config import config, load_config
-from .utils import run_cmd, files, move, remove
+from .utils import run_cmd, files, move, remove, is_scan_name
 from PyPDF2 import PdfFileMerger
 from wand.image import Image
 
@@ -207,15 +207,11 @@ def scand():
 
     while True:
         for entry in os.scandir(config['Paths']['data']):
+            if not entry.is_dir() or not is_scan_name(entry.name):
+                continue
+
             archive_dir = config['Paths']['archive']
             inbox_dir = config['Paths']['inbox']
-
-            if entry.name.endswith('.unfinished') or not entry.is_dir():
-                continue
-
-            if entry.name in [os.path.basename(archive_dir), os.path.basename(inbox_dir)]:
-                continue
-
             scan_dir = os.path.join(config['Paths']['data'], entry.name)
             pdf_output = os.path.join(inbox_dir, '{}.pdf'.format(entry.name))
             blank_dir = os.path.join(scan_dir, 'blank')
