@@ -2,6 +2,10 @@
 
 ## [UNRELEASED]
 
+### Added
+- Utility function is_scan_name(name) which returns True if name matches config dir_format and otherwise False
+
+
 ## [1.1.0] - 2016-02-25
 
 ### Added

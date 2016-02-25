@@ -6,7 +6,8 @@ import shutil
 import tempfile
 import unittest
 
-from sjkscan.utils import files, move, remove
+from sjkscan.utils import files, move, remove, is_scan_name
+from sjkscan.config import load_config
 
 
 class TestFiles(unittest.TestCase):
@@ -83,6 +84,16 @@ class TestRemove(unittest.TestCase):
     def tearDown(self):
         shutil.rmtree(self.temp_dir)
 
+
+class TestIsScanName(unittest.TestCase):
+    def setUp(self):
+        load_config()
+
+    def test_correct_scan_name_should_be_true(self):
+        self.assertTrue(is_scan_name('2015-02-23_14-13-12'))
+
+    def test_incorrect_scan_name_should_be_false(self):
+        self.assertFalse(is_scan_name('blah'))
 
 if __name__ == "__main__":
     unittest.main()
