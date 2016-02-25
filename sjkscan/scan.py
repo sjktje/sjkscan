@@ -3,8 +3,7 @@
 
 import os
 from datetime import datetime
-from .utils import config
-from .utils import read_config
+from .config import config, load_config
 from .utils import run_cmd
 
 
@@ -39,7 +38,7 @@ def scan():
 
     """
 
-    read_config()
+    load_config()
 
     timestamp = datetime.today().strftime('%Y-%m-%d_%H-%M-%S')
     unfinished = os.path.join(config['Paths']['data'], timestamp + '.unfinished')

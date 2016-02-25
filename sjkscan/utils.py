@@ -1,10 +1,6 @@
-import configparser
+import os
+import shutil
 import subprocess
-
-from pkg_resources import resource_string
-
-
-config = dict()
 
 
 def run_cmd(args):
@@ -31,40 +27,45 @@ def run_cmd(args):
     return result
 
 
-def read_config(config_file=None):
-    """Read and populate utils.config
+def files(dir, ext=None):
+    """Yield regular files in directory, optionally of specific extension.
 
-    Config values can be accessed from within other modules:
+    This function is a generator, and could be used like:
 
-        from utils import config
-        print(config['Paths'].get('data'))
+        for f in utils.files('/some/directory', 'pnm'):
+            do_something_to_the_pnm(f)
 
-    given that read_conf() has been called sometime before.
-
-    :param string config_file: optional filename to read, otherwise looks for sjkscan.conf in bundle.
+    :param dir: directory to traverse
+    :param ext: extension of files to list. Leading dot is ignored.
 
     """
-    conf = configparser.ConfigParser()
 
-    if config_file:
-        conf.read(config_file)
-    else:
-        conf.read_string(resource_string(__name__, 'sjkscan.conf').decode('utf-8'))
+    for f in os.scandir(dir):
+        if not f.is_file():
+            continue
+        if ext and not f.name.endswith('.{}'.format(ext.lstrip('.'))):
+            continue
+        yield f.name
 
-    config['Paths'] = dict()
-    config['OCR'] = dict()
-    config['Rotation'] = dict()
-    config['Scanimage'] = dict()
 
-    config['Paths']['data'] = conf['Paths'].get('data', '/Users/sjk/Code/sjkscan/data')
-    config['Paths']['dir_format'] = conf['Paths'].get('dir_format', '%Y-%m-%d_%H-%M-%S')
-    config['Paths']['inbox'] = conf['Paths'].get('inbox', '%(data)s/INBOX')
-    config['Paths']['merged'] = conf['Paths'].get('merged', '%(data)s/merged')
+def move(old, new):
+    """Move file
 
-    config['OCR']['language'] = conf['OCR'].get('language', 'swe')
+    :param old: file to move
+    :param new: new location/filename
 
-    config['Rotation']['rotate'] = conf['Rotation'].get('rotate', '180')
+    """
+    # TODO: This should be a logger statement.
+    print('Move: {} -> {}'.format(old, new))
+    shutil.move(old, new)
 
-    config['Scanimage']['resolution'] = conf['Scanimage'].get('resolution', 300)
-    config['Scanimage']['brightness'] = conf['Scanimage'].get('brightness', 80)
-    config['Scanimage']['contrast'] = conf['Scanimage'].get('contrast', 100)
+
+def remove(file):
+    """Remove file.
+
+    :param file: file to remove
+
+    """
+    # TODO: This should be a logger statement.
+    print('Remove: {}'.format(file))
+    os.remove(file)
