@@ -141,6 +141,8 @@ def merge_pdfs(inputs, output):
     out = open(output, 'wb')
 
     for filename in inputs:
+        # TODO: This should be a logger call.
+        print('Merging {} -> {}'.format(filename, output))
         try:
             input_fds[filename] = open(filename, 'rb')
         except OSError as e:
@@ -205,29 +207,32 @@ def scand():
 
     while True:
         for entry in os.scandir(config['Paths']['data']):
-            if entry.name.endswith('.unfinished') or not entry.is_dir() or entry.name == 'INBOX':
+            archive_dir = config['Paths']['archive']
+            inbox_dir = config['Paths']['inbox']
+
+            if entry.name.endswith('.unfinished') or not entry.is_dir():
+                continue
+
+            if entry.name in [os.path.basename(archive_dir), os.path.basename(inbox_dir)]:
                 continue
 
             scan_dir = os.path.join(config['Paths']['data'], entry.name)
+            pdf_output = os.path.join(inbox_dir, '{}.pdf'.format(entry.name))
+            blank_dir = os.path.join(scan_dir, 'blank')
 
-            move_blanks(scan_dir, os.path.join(scan_dir, 'blank'))
+            move_blanks(scan_dir, blank_dir)
 
             rotate_all_images_in_dir(scan_dir, 180)
-
             unpaper_dir(scan_dir, 'pnm')
-
             ocr_pnms_in_dir(scan_dir, 'swe')
-
-            pdf_output = os.path.join(config['Paths']['inbox'], '{}.pdf'.format(scan_dir))
-            merge_pdfs_in_dir(scan_dir, pdf_output)
-
-            archive_dir = config['Paths']['archive']
 
             try:
                 os.mkdir(archive_dir)
+                os.mkdir(inbox_dir)
             except:
-                pass  # Assume directory exists.
+                pass  # Assume directories exists.
 
+            merge_pdfs_in_dir(scan_dir, pdf_output)
             move(scan_dir, archive_dir)
 
         time.sleep(1)
