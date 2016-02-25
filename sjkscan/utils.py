@@ -88,3 +88,11 @@ def is_scan_name(name):
         return False
     else:
         return True
+
+
+def version():
+    """Return sjkscan version.
+    :returns: version string
+
+    """
+    return __version__
