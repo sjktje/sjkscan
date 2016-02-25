@@ -1,3 +1,4 @@
+import argparse
 import datetime
 import os
 import shutil
@@ -96,3 +97,16 @@ def version():
 
     """
     return __version__
+
+
+def parse_args(argv=None):
+    """Parse command line arguments.
+
+    :param argv: TODO
+    :returns: TODO
+
+    """
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-V', '--version', action='version', version='%(prog)s v{}'.format(version()), help='print version and exit')
+
+    return parser.parse_args(argv)
