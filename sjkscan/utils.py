@@ -102,8 +102,8 @@ def version():
 def parse_args(argv=None):
     """Parse command line arguments.
 
-    :param argv: TODO
-    :returns: TODO
+    :param argv: array of command line arguments (sys.argv)
+    :returns: object with program arguments as attributes
 
     """
     parser = argparse.ArgumentParser()
