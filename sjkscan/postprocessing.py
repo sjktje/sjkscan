@@ -3,7 +3,7 @@ import re
 import time
 
 from .config import config, load_config
-from .utils import run_cmd, files, move, remove, is_scan_name
+from .utils import run_cmd, files, move, remove, is_scan_name, parse_args
 from PyPDF2 import PdfFileMerger
 from wand.image import Image
 
@@ -191,7 +191,7 @@ def ocr_pnms_in_dir(directory, language):
         ocr(os.path.join(directory, file), language)
 
 
-def scand():
+def scand(argv=None):
     """
     Polls DATA_DIR for finished scans. Once found, scand will:
 
@@ -204,6 +204,7 @@ def scand():
     """
 
     load_config()
+    args = parse_args(argv)
 
     while True:
         for entry in os.scandir(config['Paths']['data']):

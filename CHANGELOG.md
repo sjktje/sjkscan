@@ -4,6 +4,7 @@
 
 ### Added
 - Utility function is_scan_name(name) which returns True if name matches config dir_format and otherwise False
+- -V and --version now prints version and exits.
 
 ### Changed
 - scand will now only process directories with names corresponding to dir_format

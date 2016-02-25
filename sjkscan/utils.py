@@ -1,9 +1,11 @@
+import argparse
 import datetime
 import os
 import shutil
 import subprocess
 
 from .config import config
+from . import __version__
 
 
 def run_cmd(args):
@@ -87,3 +89,24 @@ def is_scan_name(name):
         return False
     else:
         return True
+
+
+def version():
+    """Return sjkscan version.
+    :returns: version string
+
+    """
+    return __version__
+
+
+def parse_args(argv=None):
+    """Parse command line arguments.
+
+    :param argv: array of command line arguments (sys.argv)
+    :returns: object with program arguments as attributes
+
+    """
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-V', '--version', action='version', version='%(prog)s v{}'.format(version()), help='print version and exit')
+
+    return parser.parse_args(argv)
