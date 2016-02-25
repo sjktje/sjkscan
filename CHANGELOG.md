@@ -1,6 +1,6 @@
 # Change Log
 
-## [UNRELEASED]
+## [Unreleased]
 
 ### Added
 - Utility function is_scan_name(name) which returns True if name matches config dir_format and otherwise False
@@ -23,3 +23,6 @@
 
 ### Fixed
 - Configuration file interpolation. Setting inbox to '%(data)s/INBOX' in the config file will now expand to /whatever/data/is/INBOX.
+
+[Unreleased]: https://github.com/sjktje/sjkscan/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/sjktje/sjkscan/compare/v1.0.0...v1.1.0
