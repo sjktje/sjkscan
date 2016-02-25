@@ -1,6 +1,9 @@
+import datetime
 import os
 import shutil
 import subprocess
+
+from .config import config
 
 
 def run_cmd(args):
@@ -69,3 +72,18 @@ def remove(file):
     # TODO: This should be a logger statement.
     print('Remove: {}'.format(file))
     os.remove(file)
+
+
+def is_scan_name(name):
+    """Determine whether name (probably) is the name of a scan directory.
+
+    :param dir: directory name to check
+    :returns: True if it is a scan directory, False if not.
+
+    """
+    try:
+        datetime.datetime.strptime(name, config['Paths']['dir_format'])
+    except ValueError:
+        return False
+    else:
+        return True
