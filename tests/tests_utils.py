@@ -6,8 +6,9 @@ import shutil
 import tempfile
 import unittest
 
-from sjkscan.utils import files, move, remove, is_scan_name
+from sjkscan.utils import files, move, remove, is_scan_name, version
 from sjkscan.config import load_config
+from sjkscan import __version__
 
 
 class TestFiles(unittest.TestCase):
@@ -94,6 +95,12 @@ class TestIsScanName(unittest.TestCase):
 
     def test_incorrect_scan_name_should_be_false(self):
         self.assertFalse(is_scan_name('blah'))
+
+
+class TestVersion(unittest.TestCase):
+    def test_version_returns_correct_version(self):
+        self.assertEqual(version(), __version__)
+
 
 if __name__ == "__main__":
     unittest.main()

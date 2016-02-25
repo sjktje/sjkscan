@@ -4,6 +4,7 @@ import shutil
 import subprocess
 
 from .config import config
+from . import __version__
 
 
 def run_cmd(args):
