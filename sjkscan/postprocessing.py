@@ -215,7 +215,8 @@ def main(argv=None):
     """
 
     load_config()
-    init_logging()
+    init_logging(config['Logging']['level'])
+
     args = parse_args(argv)
 
     while True:

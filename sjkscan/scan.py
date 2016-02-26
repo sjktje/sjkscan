@@ -45,7 +45,7 @@ def main():
     """
 
     load_config()
-    init_logging()
+    init_logging(config['Logging']['level'])
 
     timestamp = datetime.today().strftime('%Y-%m-%d_%H-%M-%S')
     unfinished = os.path.join(config['Paths']['data'], timestamp + '.unfinished')
