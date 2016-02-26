@@ -29,7 +29,7 @@ def run_scan(output_directory):
     run_cmd(command)
 
 
-def scan():
+def main():
     """
     Scan documents.
 
