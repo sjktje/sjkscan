@@ -5,6 +5,7 @@
 ### Added
 - Utility function is_scan_name(name) which returns True if name matches config dir_format and otherwise False
 - -V and --version now prints version and exits.
+- Log level is settable through sjkscan.conf and command line switches -l and --loglevel
 
 ### Changed
 - scand will now only process directories with names corresponding to dir_format
