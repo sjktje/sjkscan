@@ -72,8 +72,7 @@ def remove(file):
     :param file: file to remove
 
     """
-    # TODO: This should be a logger statement.
-    print('Remove: {}'.format(file))
+    logging.debug('Removing %s', file)
     os.remove(file)
 
 
