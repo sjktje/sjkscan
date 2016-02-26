@@ -226,9 +226,9 @@ def main(argv=None):
     """
 
     load_config()
+    args = parse_args(argv)
     init_logging(config['Logging']['level'])
 
-    args = parse_args(argv)
 
     while True:
         for entry in os.scandir(config['Paths']['data']):
