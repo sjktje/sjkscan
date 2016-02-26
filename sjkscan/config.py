@@ -1,3 +1,15 @@
+# -*- coding: utf-8 -*-
+"""
+    sjkscan.config
+    ~~~~~~~~~~~~~~
+
+    This module handles loading the configuration file and makes sure only
+    proper settings are placed in the config dict.
+
+    :copyright: (c) 2016 by Svante Kvarnström
+    :license: BSD, see LICENSE for more details.
+"""
+
 import configparser
 
 from pkg_resources import resource_string

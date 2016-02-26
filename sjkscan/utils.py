@@ -1,3 +1,14 @@
+# -*- coding: utf-8 -*-
+"""
+    sjkscan.utils
+    ~~~~~~~~~~~~~
+
+    This module provides utility functions.
+
+    :copyright: (c) 2016 by Svante Kvarnström
+    :license: BSD, see LICENSE for more details.
+"""
+
 import argparse
 import datetime
 import logging

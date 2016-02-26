@@ -1,3 +1,15 @@
+# -*- coding: utf-8 -*-
+"""
+    sjkscan.postprocessing
+    ~~~~~~~~~~~~~~~~~~~~~~
+
+    Implements all post processing related actions that sjkscan take on a
+    scanned document.
+
+    :copyright: (c) 2016 by Svante Kvarnström
+    :license: BSD, see LICENSE for more details.
+"""
+
 import logging
 import os
 import re

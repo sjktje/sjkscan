@@ -1,5 +1,13 @@
-#!/usr/bin/env python
-# encoding: utf-8
+# -*- coding: utf-8 -*-
+"""
+    sjkscan.scan
+    ~~~~~~~~~~~~
+
+    This module provides scanning functionality.
+
+    :copyright: (c) 2016 by Svante Kvarnström
+    :license: BSD, see LICENSE for more details.
+"""
 
 import logging
 import os

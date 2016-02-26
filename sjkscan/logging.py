@@ -1,3 +1,14 @@
+# -*- coding: utf-8 -*-
+"""
+    sjkscan.logging
+    ~~~~~~~~~~~~~~~
+
+    This module handles logging related tasks, such as initialising the
+    logging environment.
+
+    :copyright: (c) 2016 by Svante Kvarnström
+    :license: BSD, see LICENSE for more details.
+"""
 import logging
 
 
