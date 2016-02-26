@@ -32,6 +32,8 @@ def run_scan(output_directory):
 
     run_cmd(command)
 
+    logging.info('Finished scanning to %s', output_directory)
+
 
 def main():
     """
@@ -50,14 +52,16 @@ def main():
     finished = os.path.join(config['Paths']['data'], timestamp)
     output_dir = os.path.join(config['Paths']['data'], unfinished)
 
+    logging.debug('Creating output directory %s', output_dir)
     try:
         os.mkdir(output_dir)
     except OSError as e:
-        print('Could not create {}: {}', output_dir, e)
+        logging.error('Could not create %s: %s', output_dir, e)
 
     run_scan(output_dir)
 
+    logging.debug('Renaming %s to %s', unfinished, finished)
     try:
         os.rename(unfinished, finished)
     except OSError as e:
-        print('Could not rename {} to {}: {}', unfinished, finished, e)
+        logging.error('Could not rename %s to %s: %s', unfinished, finished, e)

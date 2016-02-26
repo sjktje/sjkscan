@@ -1,5 +1,6 @@
 import argparse
 import datetime
+import logging
 import os
 import shutil
 import subprocess
@@ -19,7 +20,7 @@ def run_cmd(args):
     if isinstance(args, list):
         args = ' '.join(args)
 
-    print("Running: {}".format(args))
+    logging.debug('run_cmd: %s', args)
 
     try:
         result = subprocess.run(
