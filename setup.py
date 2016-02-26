@@ -18,7 +18,7 @@ setup(
     entry_points={
         'console_scripts': [
             'scan = sjkscan.scan:main',
-            'scand = sjkscan.postprocessing:scand'
+            'scand = sjkscan.postprocessing:main'
         ]
     },
     classifiers=[

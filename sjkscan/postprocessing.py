@@ -202,7 +202,7 @@ def ocr_pnms_in_dir(directory, language):
         ocr(os.path.join(directory, file), language)
 
 
-def scand(argv=None):
+def main(argv=None):
     """
     Polls DATA_DIR for finished scans. Once found, scand will:
 
