@@ -62,8 +62,7 @@ def move(old, new):
     :param new: new location/filename
 
     """
-    # TODO: This should be a logger statement.
-    print('Move: {} -> {}'.format(old, new))
+    logging.debug('Renaming %s -> %s', old, new)
     shutil.move(old, new)
 
 
