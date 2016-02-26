@@ -52,7 +52,7 @@ def rotate_all_images_in_dir(dirname, degrees):
 def unpaper(filename):
     """Process file with unpaper and delete original.
 
-    :param filename: TODO
+    :param filename: file to run unpaper on
 
     """
     logging.info('Running unpaper on %s', filename)
@@ -162,7 +162,6 @@ def merge_pdfs(inputs, output):
     logging.info('Merging PDF files into %s...', output)
 
     for filename in inputs:
-        # TODO: This should be a logger call.
         logging.debug('Merging %s -> %s', filename, output)
         try:
             input_fds[filename] = open(filename, 'rb')
