@@ -108,5 +108,15 @@ def parse_args(argv=None):
     """
     parser = argparse.ArgumentParser()
     parser.add_argument('-V', '--version', action='version', version='%(prog)s v{}'.format(version()), help='print version and exit')
+    parser.add_argument('-l', '--loglevel', type=str, help='log level')
 
-    return parser.parse_args(argv)
+    args = parser.parse_args(argv)
+
+    if args.loglevel:
+        if args.loglevel.upper() in ['DEBUG', 'INFO', 'WARNING', 'ERROR']:
+            config['Logging']['level'] = args.loglevel.upper()
+            print('Log level is {}'.format(config['Logging']['level']))
+        else:
+            raise ValueError('{} is not a valid log level.', args.loglevel.upper())
+
+    return args
