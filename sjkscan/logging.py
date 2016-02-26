@@ -9,6 +9,6 @@ def init_logging():
     logging.basicConfig(
         level=logging.DEBUG,
         datefmt='%Y-%m-%d %H:%M:%S',
-        format='%(asctime)s %(message)s',
+        format='%(asctime)s [%(levelname)s] %(message)s',
     )
     logging.debug('Initialising logging')
