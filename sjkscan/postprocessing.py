@@ -3,10 +3,12 @@ import os
 import re
 import time
 
-from .config import config, load_config
-from .utils import run_cmd, files, move, remove, is_scan_name, parse_args
 from PyPDF2 import PdfFileMerger
 from wand.image import Image
+
+from .config import config, load_config
+from .logging import init_logging
+from .utils import run_cmd, files, move, remove, is_scan_name, parse_args
 
 
 def rotate_image(filename, degrees):
@@ -16,7 +18,7 @@ def rotate_image(filename, degrees):
     :param int degrees: amount of degrees to rotate
 
     """
-    logging.info('Rotating %s %d degrees', filename, degrees)
+    logging.info('Rotating %s %s degrees', filename, degrees)
     with Image(filename=filename) as image:
         with image.clone() as rotated:
             rotated.rotate(degrees)
@@ -30,7 +32,7 @@ def rotate_all_images_in_dir(dirname, degrees):
     :param int degrees: number of degrees to rotate
 
     """
-    logging.info('Rotating images %d degrees in directory %s', dirname, degrees)
+    logging.info('Rotating images %s degrees in directory %s', dirname, degrees)
     for f in files(dirname):
         rotate_image(os.path.join(dirname, f), degrees)
 
@@ -213,6 +215,7 @@ def scand(argv=None):
     """
 
     load_config()
+    init_logging()
     args = parse_args(argv)
 
     while True:
