@@ -1,10 +1,13 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
+import logging
 import os
+
 from datetime import datetime
 from .config import config, load_config
 from .utils import run_cmd
+from .logging import init_logging
 
 
 def run_scan(output_directory):
@@ -13,6 +16,7 @@ def run_scan(output_directory):
     :param string output_directory: directory to write scanned images to
 
     """
+    logging.info('Scanning to %s', output_directory)
 
     command = [
         'scanimage',
@@ -39,6 +43,7 @@ def main():
     """
 
     load_config()
+    init_logging()
 
     timestamp = datetime.today().strftime('%Y-%m-%d_%H-%M-%S')
     unfinished = os.path.join(config['Paths']['data'], timestamp + '.unfinished')
