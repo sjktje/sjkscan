@@ -23,6 +23,12 @@ from . import __version__
 def run_cmd(args):
     """Run shell command and return its output.
 
+    Arguments and output is logged if log level DEBUG is set. Example usage::
+
+        output = run_cmd('ls -l')
+        for line in output.splitlines():
+            print(line)
+
     :param args: list or string of shell command and arguments
     :returns: output of command
 
@@ -36,13 +42,19 @@ def run_cmd(args):
     try:
         result = subprocess.run(
             args,
+            stderr=subprocess.STDOUT,
             stdout=subprocess.PIPE,
-            shell=True).stdout
+            shell=True
+        )
     except OSError as e:
         logging.error('Execution failed: %s', e)
         raise
 
-    return result
+    for line in result.stdout.splitlines():
+        logging.debug('run_cmd output: %s', line)
+    logging.debug('run_cmd %s returned %s', args, result.returncode)
+
+    return result.stdout
 
 
 def files(dir, ext=None):
