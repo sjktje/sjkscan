@@ -1,3 +1,4 @@
+import logging
 import os
 import re
 import time
@@ -15,6 +16,7 @@ def rotate_image(filename, degrees):
     :param int degrees: amount of degrees to rotate
 
     """
+    logging.info('Rotating %s %d degrees', filename, degrees)
     with Image(filename=filename) as image:
         with image.clone() as rotated:
             rotated.rotate(degrees)
@@ -28,6 +30,7 @@ def rotate_all_images_in_dir(dirname, degrees):
     :param int degrees: number of degrees to rotate
 
     """
+    logging.info('Rotating images %d degrees in directory %s', dirname, degrees)
     for f in files(dirname):
         rotate_image(os.path.join(dirname, f), degrees)
 
@@ -38,6 +41,7 @@ def unpaper(filename):
     :param filename: TODO
 
     """
+    logging.info('Running unpaper on %s', filename)
     unpapered_filename = filename + '.unpapered'
     # TODO: We don't use unpaper's --overwrite because it currently seems to be
     # broken. Once it's been fixed, just --overwrite the original.
@@ -52,7 +56,6 @@ def unpaper_dir(directory, extension=None):
     :param string extension: extension of files to run unpaper on
 
     """
-
     for f in files(directory, extension):
         unpaper(os.path.join(directory, f))
 
@@ -71,6 +74,7 @@ def is_blank(filename):
 
     """
     if not os.path.exists(filename):
+        logging.debug('is_blank: file %s does not exist.')
         return True
 
     c = 'identify -verbose %s' % filename
@@ -83,8 +87,10 @@ def is_blank(filename):
         if match:
             stdev = float(match.group('percent'))
             if stdev > 0.05:
+                logging.debug('is_blank: %s is NOT blank - standard deviation > 0.05 (%d)', filename, stdev)
                 return False
 
+    logging.debug('is_blank: %s is probably blank', filename)
     return True
 
 
@@ -124,7 +130,6 @@ def remove_if_blank(filename):
 
     """
     if is_blank(filename):
-        print('Removing (probably) blank page {}'.format(filename))
         remove(filename)
 
 
@@ -140,16 +145,19 @@ def merge_pdfs(inputs, output):
 
     out = open(output, 'wb')
 
+    logging.info('Merging PDF files into %s...', output)
+
     for filename in inputs:
         # TODO: This should be a logger call.
-        print('Merging {} -> {}'.format(filename, output))
+        logging.debug('Merging %s -> %s', filename, output)
         try:
             input_fds[filename] = open(filename, 'rb')
         except OSError as e:
-            print('Error opening {}: {}'.format(filename, e))
+            logging.error('Could not open %s: %s', filename, e)
         merger.append(input_fds[filename])
 
     merger.write(out)
+    logging.info('Finished merging PDF files into %s', output)
 
 
 def merge_pdfs_in_dir(directory, output):
@@ -173,6 +181,7 @@ def ocr(filename, language):
     :param string language: language(s) expected to be used in file
 
     """
+    logging.info('Performing OCR (%s) on %s', language, filename)
     base_output_name = filename[:-4]
     command = 'tesseract {} {} -l {} pdf'.format(filename,
                                                  base_output_name,
