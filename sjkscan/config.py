@@ -36,6 +36,9 @@ def load_config(config_file=None):
             ('resolution', 300),
             ('brightness', 80),
             ('contrast', 100)
+        ],
+        'Logging': [
+            ('level', 'INFO')
         ]
     }
 

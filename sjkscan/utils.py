@@ -1,5 +1,6 @@
 import argparse
 import datetime
+import logging
 import os
 import shutil
 import subprocess
@@ -19,7 +20,7 @@ def run_cmd(args):
     if isinstance(args, list):
         args = ' '.join(args)
 
-    print("Running: {}".format(args))
+    logging.debug('run_cmd: %s', args)
 
     try:
         result = subprocess.run(
@@ -27,7 +28,8 @@ def run_cmd(args):
             stdout=subprocess.PIPE,
             shell=True).stdout
     except OSError as e:
-        print('Execution failed: {}'.format(e))
+        logging.error('Execution failed: %s', e)
+        raise
 
     return result
 
@@ -60,8 +62,7 @@ def move(old, new):
     :param new: new location/filename
 
     """
-    # TODO: This should be a logger statement.
-    print('Move: {} -> {}'.format(old, new))
+    logging.debug('Renaming %s -> %s', old, new)
     shutil.move(old, new)
 
 
@@ -71,8 +72,7 @@ def remove(file):
     :param file: file to remove
 
     """
-    # TODO: This should be a logger statement.
-    print('Remove: {}'.format(file))
+    logging.debug('Removing %s', file)
     os.remove(file)
 
 
@@ -108,5 +108,15 @@ def parse_args(argv=None):
     """
     parser = argparse.ArgumentParser()
     parser.add_argument('-V', '--version', action='version', version='%(prog)s v{}'.format(version()), help='print version and exit')
+    parser.add_argument('-l', '--loglevel', type=str, help='log level')
 
-    return parser.parse_args(argv)
+    args = parser.parse_args(argv)
+
+    if args.loglevel:
+        if args.loglevel.upper() in ['DEBUG', 'INFO', 'WARNING', 'ERROR']:
+            config['Logging']['level'] = args.loglevel.upper()
+            print('Log level is {}'.format(config['Logging']['level']))
+        else:
+            raise ValueError('{} is not a valid log level.', args.loglevel.upper())
+
+    return args
