@@ -28,7 +28,8 @@ def run_cmd(args):
             stdout=subprocess.PIPE,
             shell=True).stdout
     except OSError as e:
-        print('Execution failed: {}'.format(e))
+        logging.error('Execution failed: %s', e)
+        raise
 
     return result
 
