@@ -15,7 +15,7 @@ import os
 from datetime import datetime
 from .config import config, load_config
 from .utils import run_cmd
-from .logging import init_logging
+from .logger import init_logging
 
 
 def run_scan(output_directory):

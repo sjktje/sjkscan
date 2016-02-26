@@ -19,7 +19,7 @@ from PyPDF2 import PdfFileMerger
 from wand.image import Image
 
 from .config import config, load_config
-from .logging import init_logging
+from .logger import init_logging
 from .utils import run_cmd, files, move, remove, is_scan_name, parse_args
 
 
