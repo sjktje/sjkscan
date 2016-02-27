@@ -13,6 +13,15 @@ sjkscan.config module
     :undoc-members:
     :show-inheritance:
 
+sjkscan.logger module
+---------------------
+
+
+.. automodule:: sjkscan.logger
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 sjkscan.postprocessing module
 -----------------------------
 
