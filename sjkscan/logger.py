@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-    sjkscan.logging
-    ~~~~~~~~~~~~~~~
+    sjkscan.logger
+    ~~~~~~~~~~~~~~
 
     This module handles logging related tasks, such as initialising the
     logging environment.
