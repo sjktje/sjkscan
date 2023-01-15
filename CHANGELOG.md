@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+- Use hatch to build package
+- Update Wand and PyPDF2 dependencies
+
 ## [1.2.0] - 2016-02-27
 
 ### Added

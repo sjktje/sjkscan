@@ -11,8 +11,8 @@ authors = [
     { name = "Svante Kvarnström", email = "sjk@sjk.io" },
 ]
 dependencies = [
-  "PyPDF2==1.25.1",
-  "Wand==0.4.2"
+  "PyPDF2==3.0.1",
+  "Wand==0.6.11"
 ]
 classifiers = [
     "Development Status :: 3 - Alpha",
