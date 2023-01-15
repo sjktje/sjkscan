@@ -1,5 +1,6 @@
 .ropeproject
 data/
+dist/
 docs/_build
 main.jpg
 output/*
