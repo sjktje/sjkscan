@@ -10,6 +10,10 @@ license = {text = "BSD"}
 authors = [
     { name = "Svante Kvarnström", email = "sjk@sjk.io" },
 ]
+dependencies = [
+  "PyPDF2==1.25.1",
+  "Wand==0.4.2"
+]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "License :: OSI Approved :: BSD License",
